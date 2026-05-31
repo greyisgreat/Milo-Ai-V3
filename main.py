@@ -1,22 +1,21 @@
 import os
 import sys
 
-def get_api_key():
-    # Check if the key is already set
-    if "GEMINI_API_KEY" not in os.environ:
-        print("\n--- M.I.L.O SETUP ---")
-        key = input("Please enter your Gemini API Key: ").strip()
-        if key:
-            os.environ["GEMINI_API_KEY"] = key
-            return key
-        else:
-            print("API Key is required to run M.I.L.O.")
-            sys.exit()
-    return os.environ.get("GEMINI_API_KEY")
+def get_api_key_from_user():
+    print("--- M.I.L.O SETUP ---")
+    # This command pauses the app and waits for you to type the key in the terminal
+    key = input("Please paste your Gemini API Key here and press Enter: ").strip()
+    return key
 
-# Initialize the key
-api_key = get_api_key()
+# Get the key directly from you
+api_key = get_api_key_from_user()
 
-# Your existing main logic goes here
-print("M.I.L.O initialized successfully!")
-# Example: start your AI loops below
+if not api_key:
+    print("No key provided. Exiting.")
+    sys.exit()
+
+# Now the app proceeds using the key you just typed
+os.environ["GEMINI_API_KEY"] = api_key
+print("Key accepted. M.I.L.O is starting...")
+
+# [Rest of your existing code goes below this line]
