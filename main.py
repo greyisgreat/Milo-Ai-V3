@@ -1,42 +1,28 @@
 import os
 import sys
-import psutil
 from PySide6.QtWidgets import QApplication
-# Add other imports here, e.g., your UI classes
 
 def get_api_key():
-    # If the environment already has the key (e.g., from Codespaces Secrets), use it
-    if "GEMINI_API_KEY" in os.environ:
-        return os.environ["GEMINI_API_KEY"]
-    
-    # Otherwise, prompt the user for the key
-    print("\n--- M.I.L.O SETUP ---")
+    # This prompts you for the key in the terminal
+    print("--- M.I.L.O SETUP ---")
     key = input("Please paste your Gemini API Key here and press Enter: ").strip()
-    
     if not key:
-        print("Error: API Key is required to run M.I.L.O.")
+        print("Error: API Key is required.")
         sys.exit()
-        
     os.environ["GEMINI_API_KEY"] = key
-    print("Key accepted.")
     return key
 
 def main():
-    # 1. Initialize API Key
+    # 1. Get the key
     api_key = get_api_key()
     
-    # 2. Start Application
-    print("Starting M.I.L.O...")
+    # 2. Initialize the App
     app = QApplication(sys.argv)
     
-    # Here you would typically initialize your main UI window
-    # window = MainWindow() 
-    # window.show()
+    # 3. M.I.L.O Logic
+    print("M.I.L.O is online.")
     
-    # 3. Placeholder to keep the app running in Codespaces
-    print("M.I.L.O is running (GUI not available in Codespaces).")
-    
-    # This prevents the script from exiting immediately
+    # This is the line that actually runs the UI
     # sys.exit(app.exec())
 
 if __name__ == "__main__":
