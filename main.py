@@ -1,19 +1,23 @@
-import sys
 import os
-from PySide6.QtWidgets import QApplication
-from src.ui.main_window import MiloWindow
-from src.ui.setup_wizard import SetupWizard # Import the wizard
+import sys
+from PySide6.QtWidgets import QApplication, QInputDialog
 
-def main():
-    app = QApplication(sys.argv)
-    
-    # Check for API Key
-    if not os.path.exists(".env"):
-        wizard = SetupWizard()
-        if wizard.exec() != QDialog.Accepted:
-            return # Exit if they close the wizard without saving
+def check_for_api_key():
+    # If the environment doesn't have the key yet
+    if "GEMINI_API_KEY" not in os.environ:
+        # We need a temporary app instance to show the dialog if it's not already running
+        app = QApplication.instance() or QApplication(sys.argv)
+        
+        # This creates the popup window
+        key, ok = QInputDialog.getText(None, "M.I.L.O Setup", "Please enter your Gemini API Key:")
+        
+        if ok and key:
+            # Set the key for this session
+            os.environ["GEMINI_API_KEY"] = key
+            return key
+        else:
+            sys.exit("API Key is required to run M.I.L.O.")
+    return os.environ.get("GEMINI_API_KEY")
 
-    # Now launch the app
-    window = MiloWindow()
-    window.show()
-    sys.exit(app.exec())
+# CALL THIS IMMEDIATELY BEFORE YOUR APP STARTS
+check_for_api_key()
