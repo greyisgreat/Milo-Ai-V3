@@ -1,18 +1,19 @@
+import sys
+import os
 from PySide6.QtWidgets import QApplication
 from src.ui.main_window import MiloWindow
-from src.core.voice_engine import VoiceEngine
-from src.core.brain import Brain
-import sys
+from src.ui.setup_wizard import SetupWizard # Import the wizard
 
 def main():
     app = QApplication(sys.argv)
-    window = MiloWindow()
-    brain = Brain(window)
-    voice = VoiceEngine(window, brain)
     
-    window.show()
-    voice.start() 
-    sys.exit(app.exec())
+    # Check for API Key
+    if not os.path.exists(".env"):
+        wizard = SetupWizard()
+        if wizard.exec() != QDialog.Accepted:
+            return # Exit if they close the wizard without saving
 
-if __name__ == "__main__":
-    main()
+    # Now launch the app
+    window = MiloWindow()
+    window.show()
+    sys.exit(app.exec())
